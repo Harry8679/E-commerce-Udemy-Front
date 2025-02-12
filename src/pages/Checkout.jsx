@@ -6,7 +6,7 @@ export default function Checkout() {
   const { cart } = useContext(CartContext);
 
   const handleCheckout = async () => {
-    const { data } = await axios.post("http://localhost:5000/create-checkout-session", {
+    const { data } = await axios.post("http://localhost:7500/create-checkout-session", {
       products: cart,
     });
     window.location.href = data.url;
