@@ -1,45 +1,39 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { signInWithGoogle, auth } from "../firebaseConfig";
+import { signOut } from "firebase/auth";
 import { Link } from "react-router-dom";
-import { auth } from "../firebaseConfig";
-import { signOut, onAuthStateChanged } from "firebase/auth";
 
 export default function Navbar() {
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    // Vérifie si un utilisateur est connecté
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const handleLogin = async () => {
+    const loggedUser = await signInWithGoogle();
+    if (loggedUser) setUser(loggedUser);
+  };
 
   const handleLogout = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error("Erreur lors de la déconnexion :", error.message);
-    }
+    await signOut(auth);
+    setUser(null);
   };
 
   return (
-    <nav className="bg-gray-800 text-white p-4 flex justify-between items-center">
-      <h1 className="text-xl font-bold">🛒 E-Commerce</h1>
+    <nav className="bg-gray-900 text-white p-4 flex justify-between items-center">
+      <Link to="/" className="text-xl font-bold flex items-center">
+        🛒 E-Commerce
+      </Link>
       <div className="flex gap-4">
-        <Link to="/" className="hover:underline">Accueil</Link>
-        <Link to="/shop" className="hover:underline">Boutique</Link>
-        <Link to="/cart" className="hover:underline">Panier</Link>
+        <Link to="/" className="hover:text-gray-400">Accueil</Link>
+        <Link to="/shop" className="hover:text-gray-400">Boutique</Link>
+        <Link to="/cart" className="hover:text-gray-400">Panier</Link>
 
         {user ? (
-          <>
-            <span className="text-green-400">Bienvenue, {user.displayName || "Utilisateur"} !</span>
-            <button onClick={handleLogout} className="bg-red-500 px-4 py-2 rounded">
-              Déconnexion
-            </button>
-          </>
+          <button onClick={handleLogout} className="bg-red-500 px-4 py-2 rounded">
+            Déconnexion
+          </button>
         ) : (
-          <Link to="/login" className="bg-blue-500 px-4 py-2 rounded">Connexion</Link>
+          <button onClick={handleLogin} className="bg-blue-500 px-4 py-2 rounded">
+            Connexion
+          </button>
         )}
       </div>
     </nav>
