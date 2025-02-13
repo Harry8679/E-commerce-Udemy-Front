@@ -12,6 +12,9 @@ export default function Checkout() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  // Calcul du prix total
+  const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+
   const handleCheckout = async () => {
     if (cart.length === 0) {
       setErrorMessage("Votre panier est vide.");
@@ -26,14 +29,16 @@ export default function Checkout() {
         products: cart,
       });
 
+      console.log("🔄 Réponse Stripe :", data); // Debugging
+
       if (data.url) {
         window.location.href = data.url;
       } else {
-        throw new Error("Aucune URL Stripe retournée.");
+        throw new Error("⚠️ Aucune URL Stripe retournée.");
       }
     } catch (error) {
       console.error("❌ Erreur de paiement :", error);
-      setErrorMessage("Une erreur est survenue lors du paiement. Veuillez réessayer.");
+      setErrorMessage(error.response?.data?.error || "Une erreur est survenue lors du paiement. Veuillez réessayer.");
     } finally {
       setLoading(false);
     }
@@ -58,7 +63,7 @@ export default function Checkout() {
               ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"}
             `}
           >
-            {loading ? "Redirection en cours..." : "Payer avec Stripe"}
+            {loading ? "Redirection en cours..." : `Payer ${totalPrice.toFixed(2)} € avec Stripe`}
           </button>
         </div>
       </div>
