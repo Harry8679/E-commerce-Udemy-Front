@@ -1,6 +1,5 @@
-
 import { Link } from "react-router-dom";
-import { CheckCircleIcon } from "@heroicons/react/outline";
+import { CheckCircleIcon } from "@heroicons/react/24/outline"; // ✅ Correct pour Heroicons v2
 
 export default function Success() {
   return (
