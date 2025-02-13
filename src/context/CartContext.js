@@ -18,12 +18,22 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  const decreaseQuantity = (id) => {
+    setCart((prevCart) =>
+      prevCart
+        .map((item) =>
+          item.id === id ? { ...item, quantity: item.quantity - 1 } : item
+        )
+        .filter((item) => item.quantity > 0) // Supprime l'article si la quantité est 0
+    );
+  };
+
   const removeFromCart = (id) => {
     setCart((prev) => prev.filter((product) => product.id !== id));
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, decreaseQuantity }}>
       {children}
     </CartContext.Provider>
   );
