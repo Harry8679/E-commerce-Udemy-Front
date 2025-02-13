@@ -1,9 +1,11 @@
+
 import { Link } from "react-router-dom";
-import { CheckCircleIcon } from "@heroicons/react/24/outline"; // ✅ Correct pour Heroicons v2
+import { CheckCircleIcon } from '@heroicons/react/24/solid';
 
 export default function Success() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-green-50 text-center p-6">
+      {/* <CheckCircleIcon className="w-24 h-24 text-green-500" /> */}
       <CheckCircleIcon className="w-24 h-24 text-green-500" />
       <h1 className="text-3xl font-semibold text-green-700 mt-4">Paiement Réussi 🎉</h1>
       <p className="text-lg text-gray-600 mt-2">
